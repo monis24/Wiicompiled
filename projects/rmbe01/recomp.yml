@@ -1,0 +1,39 @@
+schema_version: 1
+workspace_root: ../..
+
+project:
+  id: sluggers-rmbe01
+  display_name: Mario Super Sluggers NTSC-U
+  game_id: RMBE01
+  region: E
+
+memory:
+  base: 0x80000000
+  size: 0x01800000
+  # From __init_registers (0x800041A8): .sdata/.sdata2 start + 0x8000.
+  sda_base: 0x807961C0
+  sda2_base: 0x8079EDC0
+
+inputs:
+  # Extracted with nodtool into the harness's game/ folder; never copied into this repo.
+  dol:
+    path: ../game/extracted/sys/main.dol
+
+translation:
+  entry_points:
+    - 0x8000403C
+  # No function map yet: discovery is recursive from the entry point only.
+  allow_unsupported_instructions: true
+
+runtime:
+  # Empty on purpose: the MKW HLE overrides in runtime/src are pinned to RMCP01 addresses
+  # and are compiled out for this game, so the translator must not skip those addresses.
+  native_registration_root: runtime/src/games/rmbe01
+  native_abi_directories: []
+
+output:
+  root: generated
+  functions: functions
+  runtime_config: RuntimeConfig.h
+  data_initializer: data_sections_init.cpp
+  base_manifest: ../build/rmbe01/base/rmbe01_base_manifest.json

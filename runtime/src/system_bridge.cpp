@@ -484,7 +484,11 @@ void SystemBridge::SeedLowMemDefaults(const Memory::Config& config) {
     };
 
     std::vector<SeedEntry> entries;
+#if defined(WIICOMPILED_GAME_RMBE01)
+    constexpr uint32_t kMem1ArenaLoDefault = 0x807A4E80u;  // end of RMBE01 .bss
+#else
     constexpr uint32_t kMem1ArenaLoDefault = 0x80399180u;
+#endif
     uint32_t mem1ArenaHiDefault = 0x817f0520u;
     constexpr uint32_t kBusClockHz =
         static_cast<uint32_t>(TimeBaseContract::kBusClockHz);

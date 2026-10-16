@@ -75,6 +75,11 @@ endif()
 # aurora-main and its third-party tree stay unaffected.
 set(MKW_PROJECT_COMPILE_DEFINITIONS NOMINMAX)
 
+# Game the translated shards come from. The HLE overrides in src/hle are pinned to
+# RMCP01 (Mario Kart Wii PAL) addresses and are registered only for that game.
+set(WIICOMPILED_GAME_ID "RMCP01" CACHE STRING "Disc game ID of the translated game")
+list(APPEND MKW_PROJECT_COMPILE_DEFINITIONS WIICOMPILED_GAME_${WIICOMPILED_GAME_ID}=1)
+
 set(CMAKE_CXX_STANDARD 17)
 
 # Declared before the vendored libraries so the third-party block below can

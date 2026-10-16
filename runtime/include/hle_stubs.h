@@ -38,6 +38,7 @@ extern "C" void OS_HLE_EndDeferredGuestCallbacks();
 // renaming requires updating Translator.Cli/Program.cs, RuntimeNativeGuestEffectAnalyzer.cs,
 // TranslatedBuildShardEmitter.cs and RuntimeNativeFunctionAbiProvider.cs together.
 
+#if defined(WIICOMPILED_GAME_RMCP01)
 #define PPC_NATIVE_OVERRIDE(addr_hex, name, ret_type, arg_list, call_list) \
     extern "C" ret_type func_##addr_hex arg_list { return name call_list; } \
     REGISTER_NATIVE_FUNCTION(0x##addr_hex, name)
@@ -45,3 +46,8 @@ extern "C" void OS_HLE_EndDeferredGuestCallbacks();
 #define PPC_NATIVE_OVERRIDE_VOID(addr_hex, name, arg_list, call_list) \
     extern "C" void func_##addr_hex arg_list { name call_list; } \
     REGISTER_NATIVE_FUNCTION(0x##addr_hex, name)
+#else
+// The addresses above belong to RMCP01; other games get no overrides from this set.
+#define PPC_NATIVE_OVERRIDE(addr_hex, name, ret_type, arg_list, call_list)
+#define PPC_NATIVE_OVERRIDE_VOID(addr_hex, name, arg_list, call_list)
+#endif

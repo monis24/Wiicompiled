@@ -129,6 +129,12 @@ void WriteEggScreenRecord(uint32_t recordAddr, uint32_t width) {
 }
 
 void ApplyEggScreenRecords(uint32_t surfaceWidth, uint32_t surfaceHeight) {
+#if !defined(WIICOMPILED_GAME_RMCP01)
+    // The EGG screen records and handlers below live at RMCP01 addresses.
+    (void)surfaceWidth;
+    (void)surfaceHeight;
+    return;
+#endif
     using namespace MkwDynamicAspect;
     const uint32_t width43 =
         g_widescreenConfigured ? EggRecordWidth(kEggRecordWidth43, surfaceWidth, surfaceHeight)
