@@ -236,7 +236,8 @@ int RunEmitBuildShards(string[] argsTail)
             nativeSourcePath,
             string.IsNullOrWhiteSpace(resolvedProfile) ? null : Path.GetFullPath(resolvedProfile),
             string.IsNullOrWhiteSpace(retroCpp) ? null : Path.GetFullPath(retroCpp),
-            NativeIndex: nativeIndex));
+            NativeIndex: nativeIndex,
+            AllowUnsupportedInstructions: project?.Translation.AllowUnsupportedInstructions ?? false));
         Console.WriteLine("[translator] emitted stable translated build graph");
         Console.WriteLine($"  base functions: {result.BaseFunctionCount:N0}");
         Console.WriteLine($"  shared base functions: {result.SharedBaseFunctionCount:N0}");

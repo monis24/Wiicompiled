@@ -18,7 +18,8 @@ public sealed record TranslatedBuildShardOptions(
     int BaseShardCount = 72,
     int ModShardCount = 48,
     int RegistrationShardCount = 16,
-    RuntimeNativeIndex? NativeIndex = null);
+    RuntimeNativeIndex? NativeIndex = null,
+    bool AllowUnsupportedInstructions = false);
 
 /// <summary>
 /// Per-shard compile-cost spread for one partition. Frozen membership does not
@@ -139,7 +140,11 @@ public static partial class TranslatedBuildShardEmitter
         Directory.CreateDirectory(outputRoot);
 
         var metadata = BaseTranslationOutputMetadataFile.Read(options.BaseMetadataPath);
-        metadata.RequireReleaseEligible(options.BaseMetadataPath);
+        // A developer translation (manifest allow_unsupported_instructions) builds with its traps.
+        if (!options.AllowUnsupportedInstructions)
+        {
+            metadata.RequireReleaseEligible(options.BaseMetadataPath);
+        }
         TranslationSourceBundle? baseSourceBundle = null;
         if (!string.IsNullOrWhiteSpace(metadata.SourceBundlePath))
         {
